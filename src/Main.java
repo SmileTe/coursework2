@@ -5,16 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
-     /* - для тестирования
-    public static void main(String[] args) {
-
-        Map<Integer, Task> listTask = new HashMap<>();
-        Task task1 = new Task("mm", "jgbcfybt", Task.TypeTask.PRIVATE, TypeRepeatable.DAILY);
-        listTask.put(task1.getId(), task1);
-    }
-      */
-
-    public static void main(String[] args) {
+        public static void main(String[] args) {
         Map<Integer, Task> listTask = new HashMap<>();
 
         try (Scanner scanner = new Scanner(System.in)) {
