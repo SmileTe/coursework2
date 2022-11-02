@@ -2,6 +2,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class Task implements Repeatable {
 private String title;
@@ -117,6 +118,19 @@ public enum TypeTask{
     @Override
     public boolean nextDateRepeatableForAnnual(LocalDateTime date) {
         return date.getDayOfMonth()==dateTime.getDayOfMonth()&&date.getMonth() == dateTime.getMonth();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(title, task.title) && Objects.equals(id, task.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, id);
     }
 
     @Override

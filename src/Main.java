@@ -5,16 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
-     /* - для тестирования
-    public static void main(String[] args) {
-
-        Map<Integer, Task> listTask = new HashMap<>();
-        Task task1 = new Task("mm", "jgbcfybt", Task.TypeTask.PRIVATE, TypeRepeatable.DAILY);
-        listTask.put(task1.getId(), task1);
-    }
-      */
-
-    public static void main(String[] args) {
+        public static void main(String[] args) {
         Map<Integer, Task> listTask = new HashMap<>();
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -29,14 +20,8 @@ public class Main {
                             inputTask(scanner, listTask);
                             break;
                         case 2:
-                            // todo: обрабатываем пункт меню 2
-                            //удалить задачу
-                            deleteTask(scanner, listTask);
                             break;
                         case 3:
-                            // todo: обрабатываем пункт меню 3
-                            //получить день
-                            //получить задачи на указанный день
                             getListTask(scanner, listTask);
                             break;
                         case 0:
@@ -91,29 +76,26 @@ public class Main {
         }
     }
 
-    private static void getListTask(Scanner scanner, Map<Integer,Task> listTasks)  {
+    private static void getListTask(Scanner scanner, Map<Integer, Task> listTasks) {
         //получить день
         //получить задачи на указанный день
 
         System.out.println("Введите дату в формате (день/месяц/год)");
         String tDate = scanner.next();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         // конвертируем String в LocalDate
-        LocalDateTime localDate = LocalDate.parse(tDate,formatter).atStartOfDay();
+        LocalDateTime localDate = LocalDate.parse(tDate, formatter).atStartOfDay();
 
         for (Map.Entry<Integer, Task> entry : listTasks.entrySet()) {
             Task task = entry.getValue();
-           boolean isThere =  task.nextDateRepeatable(localDate);
-           if (isThere){
-               System.out.println(task);
-           }
+            boolean isThere = task.nextDateRepeatable(localDate);
+            if (isThere) {
+                System.out.println(task);
+            }
         }
 
     }
-
-
-
 
     private static void printMenu() {
         System.out.println(
