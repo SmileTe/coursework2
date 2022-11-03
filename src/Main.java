@@ -1,3 +1,5 @@
+import typeRepeatable.*;
+
 import java.text.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -5,16 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
-     /* - для тестирования
-    public static void main(String[] args) {
-
-        Map<Integer, Task> listTask = new HashMap<>();
-        Task task1 = new Task("mm", "jgbcfybt", Task.TypeTask.PRIVATE, TypeRepeatable.DAILY);
-        listTask.put(task1.getId(), task1);
-    }
-      */
-
-    public static void main(String[] args) {
+        public static void main(String[] args) {
         Map<Integer, Task> listTask = new HashMap<>();
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -29,14 +22,8 @@ public class Main {
                             inputTask(scanner, listTask);
                             break;
                         case 2:
-                            // todo: обрабатываем пункт меню 2
-                            //удалить задачу
-                            deleteTask(scanner, listTask);
                             break;
                         case 3:
-                            // todo: обрабатываем пункт меню 3
-                            //получить день
-                            //получить задачи на указанный день
                             getListTask(scanner, listTask);
                             break;
                         case 0:
@@ -66,19 +53,28 @@ public class Main {
         System.out.print("Выберите тип задачи: 1-рабочая 2-личная: ");
         int taskTypeTask = scanner.nextInt();
 
-        List<TypeRepeatable> listTypeRepeatable = new ArrayList<>();
-        listTypeRepeatable.add(TypeRepeatable.SINGLE);
-        listTypeRepeatable.add(TypeRepeatable.DAILY);
-        listTypeRepeatable.add(TypeRepeatable.WEEKLY);
-        listTypeRepeatable.add(TypeRepeatable.MONTHLY);
-        listTypeRepeatable.add(TypeRepeatable.ANNUAL);
-
         System.out.print("Выберите тип повторения: 1-однократная 2-ежедневная 3-еженедельная 4-ежемесячная 5-ежегодная: ");
         int taskTypeRepeatable = scanner.nextInt();
 
-        Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), listTypeRepeatable.get(taskTypeRepeatable-1));
+        Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), getTask(taskTypeRepeatable));
 
         listTasks.put(newTask.getId(), newTask);
+    }
+
+    private static SimpleTask getTask(int v) {
+        switch (v) {
+            case 1:
+                return new SimpleTask();
+            case 2:
+                return new TaskDaily();
+            case 3:
+                return new TaskWeekly();
+            case 4:
+                return new TaskMonthly();
+            case 5:
+                return new TaskAnnual();
+        }
+        return new SimpleTask();
     }
 
     private static void deleteTask(Scanner scanner, Map<Integer,Task> listTasks) {
@@ -91,29 +87,26 @@ public class Main {
         }
     }
 
-    private static void getListTask(Scanner scanner, Map<Integer,Task> listTasks)  {
+    private static void getListTask(Scanner scanner, Map<Integer, Task> listTasks) {
         //получить день
         //получить задачи на указанный день
 
         System.out.println("Введите дату в формате (день/месяц/год)");
         String tDate = scanner.next();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         // конвертируем String в LocalDate
-        LocalDateTime localDate = LocalDate.parse(tDate,formatter).atStartOfDay();
+        LocalDateTime localDate = LocalDate.parse(tDate, formatter).atStartOfDay();
 
         for (Map.Entry<Integer, Task> entry : listTasks.entrySet()) {
             Task task = entry.getValue();
-           boolean isThere =  task.nextDateRepeatable(localDate);
-           if (isThere){
-               System.out.println(task);
-           }
+            boolean isThere = task.getTypeRepeatable().nextDate(task.getDateTime(), localDate);
+            if (isThere) {
+                System.out.println(task);
+            }
         }
 
     }
-
-
-
 
     private static void printMenu() {
         System.out.println(
