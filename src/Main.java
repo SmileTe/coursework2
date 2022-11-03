@@ -1,3 +1,5 @@
+import typeRepeatable.*;
+
 import java.text.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,19 +53,28 @@ public class Main {
         System.out.print("Выберите тип задачи: 1-рабочая 2-личная: ");
         int taskTypeTask = scanner.nextInt();
 
-        List<TypeRepeatable> listTypeRepeatable = new ArrayList<>();
-        listTypeRepeatable.add(TypeRepeatable.SINGLE);
-        listTypeRepeatable.add(TypeRepeatable.DAILY);
-        listTypeRepeatable.add(TypeRepeatable.WEEKLY);
-        listTypeRepeatable.add(TypeRepeatable.MONTHLY);
-        listTypeRepeatable.add(TypeRepeatable.ANNUAL);
-
         System.out.print("Выберите тип повторения: 1-однократная 2-ежедневная 3-еженедельная 4-ежемесячная 5-ежегодная: ");
         int taskTypeRepeatable = scanner.nextInt();
 
-        Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), listTypeRepeatable.get(taskTypeRepeatable-1));
+        Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), getTask(taskTypeRepeatable));
 
         listTasks.put(newTask.getId(), newTask);
+    }
+
+    private static SimpleTask getTask(int v) {
+        switch (v) {
+            case 1:
+                return new SimpleTask();
+            case 2:
+                return new TaskDaily();
+            case 3:
+                return new TaskWeekly();
+            case 4:
+                return new TaskMonthly();
+            case 5:
+                return new TaskAnnual();
+        }
+        return new SimpleTask();
     }
 
     private static void deleteTask(Scanner scanner, Map<Integer,Task> listTasks) {
@@ -89,7 +100,7 @@ public class Main {
 
         for (Map.Entry<Integer, Task> entry : listTasks.entrySet()) {
             Task task = entry.getValue();
-            boolean isThere = task.nextDateRepeatable(localDate);
+            boolean isThere = task.getTypeRepeatable().nextDate(task.getDateTime(), localDate);
             if (isThere) {
                 System.out.println(task);
             }

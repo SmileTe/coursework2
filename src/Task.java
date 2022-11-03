@@ -1,15 +1,15 @@
+import typeRepeatable.Repeatable_;
+import typeRepeatable.SimpleTask;
+
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
-public class Task implements Repeatable {
+public class Task  {
 private String title;
 private String description;
 private TypeTask typeTask;
 private LocalDateTime dateTime;
-private TypeRepeatable typeRepeatable;
+private SimpleTask typeRepeatable;
 private Integer id;
 public int count;
 
@@ -27,7 +27,7 @@ public enum TypeTask{
     }
 }
 
-    public Task(String title, String description, TypeTask typeTask, TypeRepeatable typeRepeatable) {
+    public Task(String title, String description, TypeTask typeTask, SimpleTask typeRepeatable) {
 
         try {
             check(title, description, typeTask, typeRepeatable);
@@ -44,7 +44,7 @@ public enum TypeTask{
         count++;
     }
 
-    public static void check(String title, String description, TypeTask typeTask, TypeRepeatable typeRepeatable) throws WrongDataException {
+    public static void check(String title, String description, TypeTask typeTask, SimpleTask typeRepeatable) throws WrongDataException {
         if (title == null || title.isEmpty() || title.isBlank()) {
             throw new WrongDataException();
         }
@@ -71,7 +71,7 @@ public enum TypeTask{
         this.typeTask = typeTask;
     }
 
-    public void setTypeRepeatable(TypeRepeatable typeRepeatable) {
+    public void setTypeRepeatable(SimpleTask typeRepeatable) {
         this.typeRepeatable = typeRepeatable;
     }
 
@@ -79,48 +79,15 @@ public enum TypeTask{
         return id;
     }
 
-    @Override
-    public boolean nextDateRepeatable(LocalDateTime date) {
-        if(date.getYear()<dateTime.getYear()){
-            return false;
-        }
-        if (typeRepeatable == TypeRepeatable.DAILY) {
-            return nextDateRepeatableForDaily(date);
-        } else if (typeRepeatable == TypeRepeatable.WEEKLY) {
-            return nextDateRepeatableForWeekly(date);
-        } else if (typeRepeatable == TypeRepeatable.MONTHLY) {
-            return nextDateRepeatableForMonthly(date);
-        } else if (typeRepeatable == TypeRepeatable.ANNUAL) {
-            return nextDateRepeatableForAnnual(date);
-        }
-        return false;
+    public SimpleTask getTypeRepeatable() {
+        return typeRepeatable;
     }
 
-
-
-    @Override
-    public boolean nextDateRepeatableForDaily (LocalDateTime date) {
-    //ежедневная задача выведется для любой даты
-        return true;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    @Override
-    public boolean nextDateRepeatableForWeekly( LocalDateTime date) {
-    //получить дни недели для обеих задач и сравнить
-        return date.getDayOfWeek() == dateTime.getDayOfWeek();
-    }
-
-    @Override
-    public boolean nextDateRepeatableForMonthly( LocalDateTime date) {
-        return date.getDayOfMonth()==date.getDayOfMonth();
-    }
-
-    @Override
-    public boolean nextDateRepeatableForAnnual(LocalDateTime date) {
-        return date.getDayOfMonth()==dateTime.getDayOfMonth()&&date.getMonth() == dateTime.getMonth();
-    }
-
-    @Override
+     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
