@@ -56,25 +56,28 @@ public class Main {
         System.out.print("Выберите тип повторения: 1-однократная 2-ежедневная 3-еженедельная 4-ежемесячная 5-ежегодная: ");
         int taskTypeRepeatable = scanner.nextInt();
 
-        Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), getTask(taskTypeRepeatable));
+        //Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), getTask(taskTypeRepeatable));
+        Task newTask = getTask(taskTypeRepeatable, taskName, taskDescription, listTypeTask.get(taskTypeTask-1));
 
         listTasks.put(newTask.getId(), newTask);
+
+
     }
 
-    private static SimpleTask getTask(int v) {
+    private static Task getTask(int v,String taskName,String  taskDescription, Task.TypeTask typeTask) {
         switch (v) {
             case 1:
-                return new SimpleTask();
+               return new SimpleTask(taskName, taskDescription, typeTask);
             case 2:
-                return new TaskDaily();
+                return new TaskDaily(taskName, taskDescription, typeTask);
             case 3:
-                return new TaskWeekly();
+                return new TaskWeekly(taskName, taskDescription, typeTask);
             case 4:
-                return new TaskMonthly();
+                return new TaskMonthly(taskName, taskDescription, typeTask);
             case 5:
-                return new TaskAnnual();
+                return new TaskAnnual(taskName, taskDescription, typeTask);
         }
-        return new SimpleTask();
+        return new SimpleTask(taskName, taskDescription, typeTask);
     }
 
     private static void deleteTask(Scanner scanner, Map<Integer,Task> listTasks) {
@@ -100,7 +103,7 @@ public class Main {
 
         for (Map.Entry<Integer, Task> entry : listTasks.entrySet()) {
             Task task = entry.getValue();
-            boolean isThere = task.getTypeRepeatable().nextDate(task.getDateTime(), localDate);
+            boolean isThere = task.isAvailableForDate(localDate);
             if (isThere) {
                 System.out.println(task);
             }

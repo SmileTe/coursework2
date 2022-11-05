@@ -1,11 +1,19 @@
 package typeRepeatable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class TaskWeekly extends SimpleTask{
+public class TaskWeekly extends Task{
     @Override
-    public boolean nextDate(LocalDateTime dateTime, LocalDateTime inputDate) {
-        //получить дни недели для обеих задач и сравнить
-        return  inputDate.getDayOfWeek() == dateTime.getDayOfWeek();
+    public boolean isAvailableForDate(LocalDateTime inputDate) {
+        LocalDateTime startDate = this.getDateTime().atStartOfDay();
+        while(startDate.isBefore((inputDate))){
+             startDate = startDate.plusWeeks(1);        }
+        return  startDate.equals(inputDate);
+    }
+
+
+    public TaskWeekly(String title, String description, TypeTask typeTask) {
+        super(title, description, typeTask);
     }
 }
