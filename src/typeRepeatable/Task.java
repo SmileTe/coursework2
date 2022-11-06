@@ -1,18 +1,16 @@
 package typeRepeatable;
-import typeRepeatable.Repeatable_;
-import typeRepeatable.SimpleTask;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task implements Repeatable_{
+public class Task implements Repeatable {
     private String title;
     private String description;
     private TypeTask typeTask;
     private LocalDateTime dateTime;
     private Integer id;
-    public int count;
+    private static int count;
 
     public enum TypeTask{
         PRIVATE("Личная"),
@@ -28,7 +26,7 @@ public class Task implements Repeatable_{
         }
     }
 
-    public Task(String title, String description, TypeTask typeTask) {
+    public Task(String title, String description, TypeTask typeTask, LocalDateTime dateTimeTask) {
 
         try {
             check(title, description, typeTask);
@@ -40,9 +38,9 @@ public class Task implements Repeatable_{
         setDescription(description);
         setTypeTask(typeTask);
 
-        this.dateTime = LocalDateTime.now();
-        this.id = count;
-        count++;
+        this.dateTime = dateTimeTask;
+        this.id = count ++;
+
     }
 
     public static void check(String title, String description, TypeTask typeTask) throws WrongDataException {

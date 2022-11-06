@@ -7,9 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
-        public static void main(String[] args) {
-        Map<Integer, Task> listTask = new HashMap<>();
-
+    public static void main(String[] args) {
+TaskService taskService = new TaskService();
         try (Scanner scanner = new Scanner(System.in)) {
             label:
             while (true) {
@@ -19,12 +18,13 @@ public class Main {
                     int menu = scanner.nextInt();
                     switch (menu) {
                         case 1:
-                            inputTask(scanner, listTask);
+                            taskService.inputTask(scanner);
                             break;
                         case 2:
+                            taskService.deleteTask(scanner);
                             break;
                         case 3:
-                            getListTask(scanner, listTask);
+                            getTaskByDay(taskService,scanner);
                             break;
                         case 0:
                             break label;
@@ -37,62 +37,7 @@ public class Main {
         }
     }
 
-    private static void inputTask(Scanner scanner, Map<Integer,Task> listTasks) {
-
-        System.out.print("Введите название задачи: ");
-        String taskName = scanner.next();
-
-        System.out.print("Введите описание задачи: ");
-        String taskDescription = scanner.next();
-
-        List<Task.TypeTask> listTypeTask = new ArrayList<>();
-        listTypeTask.add(Task.TypeTask.WORK);
-        listTypeTask.add(Task.TypeTask.PRIVATE);
-
-        //todo можно еще цикл сделать
-        System.out.print("Выберите тип задачи: 1-рабочая 2-личная: ");
-        int taskTypeTask = scanner.nextInt();
-
-        System.out.print("Выберите тип повторения: 1-однократная 2-ежедневная 3-еженедельная 4-ежемесячная 5-ежегодная: ");
-        int taskTypeRepeatable = scanner.nextInt();
-
-        //Task newTask = new Task(taskName, taskDescription, listTypeTask.get(taskTypeTask-1), getTask(taskTypeRepeatable));
-        Task newTask = getTask(taskTypeRepeatable, taskName, taskDescription, listTypeTask.get(taskTypeTask-1));
-
-        listTasks.put(newTask.getId(), newTask);
-
-
-    }
-
-    private static Task getTask(int v,String taskName,String  taskDescription, Task.TypeTask typeTask) {
-        switch (v) {
-            case 1:
-               return new SimpleTask(taskName, taskDescription, typeTask);
-            case 2:
-                return new TaskDaily(taskName, taskDescription, typeTask);
-            case 3:
-                return new TaskWeekly(taskName, taskDescription, typeTask);
-            case 4:
-                return new TaskMonthly(taskName, taskDescription, typeTask);
-            case 5:
-                return new TaskAnnual(taskName, taskDescription, typeTask);
-        }
-        return new SimpleTask(taskName, taskDescription, typeTask);
-    }
-
-    private static void deleteTask(Scanner scanner, Map<Integer,Task> listTasks) {
-        System.out.print("Введите id задачи: ");
-        Integer taskId = scanner.nextInt();
-        if (listTasks.containsKey(taskId)) {
-            listTasks.remove(taskId);
-        } else {
-            System.out.println("Введено некорректное значение id");
-        }
-    }
-
-    private static void getListTask(Scanner scanner, Map<Integer, Task> listTasks) {
-        //получить день
-        //получить задачи на указанный день
+    private static void getTaskByDay(TaskService taskService, Scanner scanner){
 
         System.out.println("Введите дату в формате (день/месяц/год)");
         String tDate = scanner.next();
@@ -101,16 +46,11 @@ public class Main {
         // конвертируем String в LocalDate
         LocalDateTime localDate = LocalDate.parse(tDate, formatter).atStartOfDay();
 
-        for (Map.Entry<Integer, Task> entry : listTasks.entrySet()) {
-            Task task = entry.getValue();
-            boolean isThere = task.isAvailableForDate(localDate);
-            if (isThere) {
-                System.out.println(task);
-            }
+        Collection<Task> listTasks =taskService.getListTask(localDate);
+        for (Task task:listTasks) {
+            System.out.println(task);
         }
-
     }
-
     private static void printMenu() {
         System.out.println(
                 "1. Добавить задачу\n" +

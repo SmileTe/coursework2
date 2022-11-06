@@ -13,7 +13,7 @@ public class TaskWeekly extends Task{
     }
 
 
-    public TaskWeekly(String title, String description, TypeTask typeTask) {
-        super(title, description, typeTask);
+    public TaskWeekly(String title, String description, TypeTask typeTask, LocalDateTime dateTimeTask) {
+        super(title, description, typeTask,dateTimeTask);
     }
 }

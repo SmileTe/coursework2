@@ -19,7 +19,8 @@ public class TaskAnnual extends Task{
         return  startDate.equals(inputDate);
         }
 
-    public TaskAnnual(String title, String description, TypeTask typeTask) {
-        super(title, description, typeTask);
+    public TaskAnnual(String title, String description, TypeTask typeTask, LocalDateTime dateTimeTask) {
+
+        super(title, description, typeTask,dateTimeTask);
     }
 }

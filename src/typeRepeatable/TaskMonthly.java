@@ -14,7 +14,7 @@ public class TaskMonthly extends Task{
     }
 
 
-    public TaskMonthly(String title, String description, TypeTask typeTask) {
-        super(title, description, typeTask);
+    public TaskMonthly(String title, String description, TypeTask typeTask, LocalDateTime dateTimeTask) {
+        super(title, description, typeTask,dateTimeTask);
     }
 }

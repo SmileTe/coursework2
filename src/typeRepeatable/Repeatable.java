@@ -1,10 +1,9 @@
 package typeRepeatable;
 
 import java.time.LocalDateTime;
-import typeRepeatable.*;
 
 
-public interface Repeatable_ {
+public interface Repeatable {
     boolean isAvailableForDate(LocalDateTime inputDat);
 
 }

@@ -9,13 +9,13 @@ public class TaskDaily extends Task{
     public boolean isAvailableForDate(LocalDateTime inputDate) {
         LocalDateTime startDate = this.getDateTime().atStartOfDay();
         while(startDate.isBefore((inputDate))){
-            startDate = startDate.plusWeeks(1);
+            startDate = startDate.plusDays(1);
         }
         return  startDate.equals(inputDate);
     }
 
 
-    public TaskDaily(String title, String description, TypeTask typeTask) {
-        super(title, description, typeTask);
+    public TaskDaily(String title, String description, TypeTask typeTask, LocalDateTime dateTimeTask) {
+        super(title, description, typeTask,dateTimeTask);
     }
 }
